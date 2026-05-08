@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="referrer" content="no-referrer" />
+<title>DASS-21 — Depression, Anxiety & Stress</title>
+<style>
+  :root {
+    --bg: #faf7f2;
+    --surface: #ffffff;
+    --text: #2d2a26;
+    --muted: #6b655d;
+    --line: #e6e0d6;
+    --accent: #5a8a8a;
+    --accent-soft: #e3eded;
+    --d: #6a7fa3;
+    --a: #b07a6a;
+    --s: #a98c4a;
+    --warn-bg: #fbf2e8;
+    --warn-border: #d9b88a;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1916;
+      --surface: #232220;
+      --text: #ece7df;
+      --muted: #a39d92;
+      --line: #3a3833;
+      --accent: #8ab8b8;
+      --accent-soft: #2c3a3a;
+      --d: #8a9dc0;
+      --a: #c69a89;
+      --s: #c8aa6a;
+      --warn-bg: #2e2820;
+      --warn-border: #6b5a3a;
+      --shadow: 0 1px 2px rgba(0,0,0,0.2), 0 4px 16px rgba(0,0,0,0.2);
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  h1 {
+    font-size: 1.75rem;
+    margin: 0 0 4px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .subtitle {
+    color: var(--muted);
+    margin: 0 0 28px;
+    font-size: 0.95rem;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+  }
+  .instructions p { margin: 0 0 10px; }
+  .instructions p:last-child { margin-bottom: 0; }
+  .scale-legend {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 14px;
+    font-size: 0.92rem;
+  }
+  .scale-legend .num {
+    font-weight: 600;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .scale-legend .lbl { color: var(--muted); }
+  .question {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px 14px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .question.unanswered-flag {
+    border-color: var(--warn-border);
+    background: var(--warn-bg);
+  }
+  .q-text {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .q-num {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.9rem;
+    min-width: 22px;
+  }
+  .q-body {
+    flex: 1;
+    font-size: 1rem;
+  }
+  .options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .opt {
+    position: relative;
+    cursor: pointer;
+  }
+  .opt input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .opt .pill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 10px 6px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: transparent;
+    text-align: center;
+    transition: all 0.12s;
+    min-height: 64px;
+  }
+  .opt .pill .n {
+    font-weight: 600;
+    font-size: 1.05rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+  }
+  .opt .pill .lbl {
+    font-size: 0.72rem;
+    color: var(--muted);
+    line-height: 1.25;
+  }
+  .opt:hover .pill { border-color: var(--accent); }
+  .opt input:focus-visible + .pill {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .opt input:checked + .pill {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+  .opt input:checked + .pill .n { color: var(--accent); }
+  .actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  button {
+    font: inherit;
+    cursor: pointer;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: white;
+    font-weight: 500;
+    transition: opacity 0.12s, transform 0.05s;
+  }
+  button:hover { opacity: 0.92; }
+  button:active { transform: translateY(1px); }
+  button.secondary {
+    background: transparent;
+    color: var(--accent);
+  }
+  .progress {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+  }
+  .results { display: none; }
+  .results.show { display: block; }
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+  }
+  .result-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+  .result-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  .result-name.d { color: var(--d); }
+  .result-name.a { color: var(--a); }
+  .result-name.s { color: var(--s); }
+  .result-score {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+  .result-score .max { color: var(--muted); font-weight: 400; }
+  .result-severity {
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .result-severity strong { color: var(--text); }
+  .bar {
+    position: relative;
+    height: 10px;
+    background: var(--line);
+    border-radius: 5px;
+    overflow: visible;
+    margin-bottom: 6px;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+  }
+  .bar-fill.d { background: var(--d); }
+  .bar-fill.a { background: var(--a); }
+  .bar-fill.s { background: var(--s); }
+  .bar-marker {
+    position: absolute;
+    top: -3px;
+    width: 1px;
+    height: 16px;
+    background: var(--muted);
+    opacity: 0.35;
+  }
+  .bar-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    margin-top: 2px;
+  }
+  .result-blurb {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 12px 0 0;
+    line-height: 1.5;
+  }
+  .disclaimer {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 18px 0;
+    font-size: 0.92rem;
+  }
+  .disclaimer strong { display: block; margin-bottom: 4px; }
+  .footer {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .footer a { color: var(--muted); }
+  .error-banner {
+    display: none;
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    font-size: 0.92rem;
+  }
+  .error-banner.show { display: block; }
+  @media (max-width: 520px) {
+    .wrap { padding: 20px 14px 60px; }
+    .options { grid-template-columns: repeat(4, 1fr); gap: 4px; }
+    .opt .pill { padding: 8px 2px; min-height: 70px; }
+    .opt .pill .lbl { font-size: 0.66rem; }
+    h1 { font-size: 1.4rem; }
+  }
+  @media print {
+    body { background: white; }
+    button, .actions { display: none; }
+    .question, .card, .result-card { box-shadow: none; break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Depression, Anxiety &amp; Stress check-in</h1>
+  <p class="subtitle">DASS-21 · 21 items · ~3 minutes · stays on this device</p>
+
+  <div class="card instructions">
+    <p>Read each statement and choose the answer that best reflects how much it applied to you <strong>over the past week</strong>. There are no right or wrong answers — don't spend too long on any one statement.</p>
+    <p>Nothing leaves your browser. No accounts, no tracking, no data sent anywhere.</p>
+    <div class="scale-legend">
+      <span class="num">0</span><span class="lbl">Did not apply to me at all</span>
+      <span class="num">1</span><span class="lbl">Applied to me to some degree, or some of the time</span>
+      <span class="num">2</span><span class="lbl">Applied to me to a considerable degree, or a good part of the time</span>
+      <span class="num">3</span><span class="lbl">Applied to me very much, or most of the time</span>
+    </div>
+  </div>
+
+  <div id="error-banner" class="error-banner" role="alert" aria-live="polite"></div>
+
+  <form id="dass-form" novalidate></form>
+
+  <div class="actions">
+    <button type="button" id="submit-btn">See my results</button>
+    <button type="button" id="reset-btn" class="secondary">Reset</button>
+    <span class="progress" id="progress" aria-live="polite">0 / 21 answered</span>
+  </div>
+
+  <section id="results" class="results" aria-live="polite">
+    <h2 style="margin-top:32px; font-size:1.3rem;">Your results</h2>
+    <div class="disclaimer">
+      <strong>This is a screening tool, not a diagnosis.</strong>
+      The DASS-21 measures how strongly you've experienced symptoms relative to a general population — it can't diagnose anything. If your scores feel meaningful to you, or if anything you read here resonates uncomfortably, talking with a clinician, counsellor, or trusted person is a good next step.
+    </div>
+    <div id="result-d" class="result-card"></div>
+    <div id="result-a" class="result-card"></div>
+    <div id="result-s" class="result-card"></div>
+    <div class="actions">
+      <button type="button" id="retake-btn" class="secondary">Retake</button>
+    </div>
+  </section>
+
+  <div class="footer">
+    <p><strong>About this tool.</strong> This is the DASS-21 (Depression Anxiety Stress Scales — 21 item version) by S.H. Lovibond &amp; P.F. Lovibond (1995), University of New South Wales / Psychology Foundation of Australia. The DASS is in the public domain. The 21 items, scoring procedure, and severity bands here are reproduced unchanged from the canonical version published at <a href="http://www2.psy.unsw.edu.au/dass/" target="_blank" rel="noopener">www2.psy.unsw.edu.au/dass</a>.</p>
+    <p><strong>How scoring works.</strong> Each subscale (Depression, Anxiety, Stress) sums seven items scored 0–3, then doubles the total so the score (0–42) is comparable with the original DASS-42 norms. Severity bands come from the Lovibond &amp; Lovibond manual.</p>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+// --- Canonical DASS-21 data ---------------------------------------------------
+// Items verbatim from the UNSW form. Subscale: D = Depression, A = Anxiety,
+// S = Stress. Item numbers match the standard form (1–21).
+const ITEMS = [
+  { n:  1, sub: "S", text: "I found it hard to wind down" },
+  { n:  2, sub: "A", text: "I was aware of dryness of my mouth" },
+  { n:  3, sub: "D", text: "I couldn't seem to experience any positive feeling at all" },
+  { n:  4, sub: "A", text: "I experienced breathing difficulty (e.g., excessively rapid breathing, breathlessness in the absence of physical exertion)" },
+  { n:  5, sub: "D", text: "I found it difficult to work up the initiative to do things" },
+  { n:  6, sub: "S", text: "I tended to over-react to situations" },
+  { n:  7, sub: "A", text: "I experienced trembling (e.g., in the hands)" },
+  { n:  8, sub: "S", text: "I felt that I was using a lot of nervous energy" },
+  { n:  9, sub: "A", text: "I was worried about situations in which I might panic and make a fool of myself" },
+  { n: 10, sub: "D", text: "I felt that I had nothing to look forward to" },
+  { n: 11, sub: "S", text: "I found myself getting agitated" },
+  { n: 12, sub: "S", text: "I found it difficult to relax" },
+  { n: 13, sub: "D", text: "I felt down-hearted and blue" },
+  { n: 14, sub: "S", text: "I was intolerant of anything that kept me from getting on with what I was doing" },
+  { n: 15, sub: "A", text: "I felt I was close to panic" },
+  { n: 16, sub: "D", text: "I was unable to become enthusiastic about anything" },
+  { n: 17, sub: "D", text: "I felt I wasn't worth much as a person" },
+  { n: 18, sub: "S", text: "I felt that I was rather touchy" },
+  { n: 19, sub: "A", text: "I was aware of the action of my heart in the absence of physical exertion (e.g., sense of heart rate increase, heart missing a beat)" },
+  { n: 20, sub: "A", text: "I felt scared without any good reason" },
+  { n: 21, sub: "D", text: "I felt that life was meaningless" }
+];
+
+// Short labels shown under each radio. Long versions appear in the legend at top.
+const OPTION_LABELS = ["Not at all", "Some of\nthe time", "A good part\nof the time", "Most of\nthe time"];
+
+const SUBSCALES = {
+  D: {
+    name: "Depression",
+    blurb: "Captures dysphoria, hopelessness, low motivation, anhedonia (loss of pleasure), and feelings of worthlessness or meaninglessness."
+  },
+  A: {
+    name: "Anxiety",
+    blurb: "Captures autonomic arousal (racing heart, dry mouth, trembling, breathing changes), situational anxiety, and the subjective experience of fear."
+  },
+  S: {
+    name: "Stress",
+    blurb: "Captures persistent tension, irritability, agitation, difficulty relaxing, and being easily upset or impatient."
+  }
+};
+
+// Severity bands apply to the *doubled* subscale score (0–42).
+// Source: Lovibond & Lovibond (1995); cross-checked against the Australian
+// Comorbidity Guidelines (Appendix K) and Testable.org documentation.
+const SEVERITY = {
+  D: [
+    { max:  9, label: "Normal" },
+    { max: 13, label: "Mild" },
+    { max: 20, label: "Moderate" },
+    { max: 27, label: "Severe" },
+    { max: Infinity, label: "Extremely Severe" }
+  ],
+  A: [
+    { max:  7, label: "Normal" },
+    { max:  9, label: "Mild" },
+    { max: 14, label: "Moderate" },
+    { max: 19, label: "Severe" },
+    { max: Infinity, label: "Extremely Severe" }
+  ],
+  S: [
+    { max: 14, label: "Normal" },
+    { max: 18, label: "Mild" },
+    { max: 25, label: "Moderate" },
+    { max: 33, label: "Severe" },
+    { max: Infinity, label: "Extremely Severe" }
+  ]
+};
+
+// --- Render -------------------------------------------------------------------
+
+const form = document.getElementById("dass-form");
+const submitBtn = document.getElementById("submit-btn");
+const resetBtn = document.getElementById("reset-btn");
+const retakeBtn = document.getElementById("retake-btn");
+const progressEl = document.getElementById("progress");
+const errorBanner = document.getElementById("error-banner");
+const resultsEl = document.getElementById("results");
+
+function renderQuestions() {
+  const frag = document.createDocumentFragment();
+  for (const item of ITEMS) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "question";
+    wrapper.id = `q-${item.n}`;
+    wrapper.dataset.qn = item.n;
+
+    const qText = document.createElement("div");
+    qText.className = "q-text";
+    qText.innerHTML = `<span class="q-num">${item.n}.</span><span class="q-body"></span>`;
+    qText.querySelector(".q-body").textContent = item.text;
+    wrapper.appendChild(qText);
+
+    const opts = document.createElement("div");
+    opts.className = "options";
+    opts.setAttribute("role", "radiogroup");
+    opts.setAttribute("aria-label", `Question ${item.n}: ${item.text}`);
+
+    for (let v = 0; v < 4; v++) {
+      const id = `q${item.n}-${v}`;
+      const label = document.createElement("label");
+      label.className = "opt";
+      label.htmlFor = id;
+
+      const input = document.createElement("input");
+      input.type = "radio";
+      input.name = `q${item.n}`;
+      input.id = id;
+      input.value = v;
+      input.addEventListener("change", () => {
+        wrapper.classList.remove("unanswered-flag");
+        updateProgress();
+      });
+
+      const pill = document.createElement("span");
+      pill.className = "pill";
+      pill.innerHTML = `<span class="n">${v}</span><span class="lbl">${OPTION_LABELS[v].replace("\n","<br>")}</span>`;
+
+      label.appendChild(input);
+      label.appendChild(pill);
+      opts.appendChild(label);
+    }
+
+    wrapper.appendChild(opts);
+    frag.appendChild(wrapper);
+  }
+  form.appendChild(frag);
+}
+
+function getAnswers() {
+  const answers = {};
+  let count = 0;
+  for (const item of ITEMS) {
+    const checked = form.querySelector(`input[name="q${item.n}"]:checked`);
+    if (checked) {
+      answers[item.n] = parseInt(checked.value, 10);
+      count++;
+    }
+  }
+  return { answers, count };
+}
+
+function updateProgress() {
+  const { count } = getAnswers();
+  progressEl.textContent = `${count} / 21 answered`;
+}
+
+// --- Scoring ------------------------------------------------------------------
+
+function severityFor(sub, score) {
+  for (const band of SEVERITY[sub]) {
+    if (score <= band.max) return band.label;
+  }
+  return "Extremely Severe";
+}
+
+function score(answers) {
+  const raw = { D: 0, A: 0, S: 0 };
+  for (const item of ITEMS) {
+    raw[item.sub] += answers[item.n];
+  }
+  const out = {};
+  for (const sub of ["D", "A", "S"]) {
+    const doubled = raw[sub] * 2;
+    out[sub] = {
+      raw: raw[sub],
+      score: doubled,
+      severity: severityFor(sub, doubled)
+    };
+  }
+  return out;
+}
+
+// --- Results render -----------------------------------------------------------
+
+function renderResultCard(sub, result) {
+  const subKey = sub.toLowerCase();
+  const meta = SUBSCALES[sub];
+  const el = document.getElementById(`result-${subKey}`);
+
+  // Markers at each band boundary (skip the final Infinity)
+  const bands = SEVERITY[sub];
+  const markers = bands.slice(0, -1).map(b => {
+    const pct = (b.max / 42) * 100;
+    return `<span class="bar-marker" style="left:${pct}%"></span>`;
+  }).join("");
+
+  const fillPct = Math.min(100, (result.score / 42) * 100);
+
+  el.innerHTML = `
+    <div class="result-head">
+      <span class="result-name ${subKey}">${meta.name}</span>
+      <span class="result-score">${result.score}<span class="max"> / 42</span></span>
+    </div>
+    <div class="result-severity">Severity: <strong>${result.severity}</strong></div>
+    <div class="bar" aria-hidden="true">
+      <div class="bar-fill ${subKey}" style="width:${fillPct}%"></div>
+      ${markers}
+    </div>
+    <div class="bar-labels"><span>0</span><span>42</span></div>
+    <p class="result-blurb">${meta.blurb}</p>
+  `;
+}
+
+function showResults() {
+  const { answers, count } = getAnswers();
+  if (count < 21) {
+    const missing = ITEMS.filter(i => answers[i.n] === undefined).map(i => i.n);
+    errorBanner.textContent = `Please answer all 21 questions. Missing: ${missing.join(", ")}.`;
+    errorBanner.classList.add("show");
+    // Flag unanswered questions visually
+    for (const n of missing) {
+      document.getElementById(`q-${n}`).classList.add("unanswered-flag");
+    }
+    // Scroll to first missing
+    const firstMissing = document.getElementById(`q-${missing[0]}`);
+    if (firstMissing) firstMissing.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+
+  errorBanner.classList.remove("show");
+  const results = score(answers);
+  renderResultCard("D", results.D);
+  renderResultCard("A", results.A);
+  renderResultCard("S", results.S);
+  resultsEl.classList.add("show");
+  resultsEl.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function resetAll() {
+  form.reset();
+  for (const item of ITEMS) {
+    document.getElementById(`q-${item.n}`).classList.remove("unanswered-flag");
+  }
+  errorBanner.classList.remove("show");
+  resultsEl.classList.remove("show");
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// --- Wire up ------------------------------------------------------------------
+
+renderQuestions();
+updateProgress();
+submitBtn.addEventListener("click", showResults);
+resetBtn.addEventListener("click", resetAll);
+retakeBtn.addEventListener("click", resetAll);
+</script>
+</body>
+</html>
