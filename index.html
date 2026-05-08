@@ -7,35 +7,41 @@
 <title>DASS-21 — Depression, Anxiety & Stress</title>
 <style>
   :root {
-    --bg: #faf7f2;
-    --surface: #ffffff;
-    --text: #2d2a26;
-    --muted: #6b655d;
-    --line: #e6e0d6;
-    --accent: #5a8a8a;
-    --accent-soft: #e3eded;
+    --bg: #f6f1e7;
+    --surface: #fbf7ee;
+    --text: #2a2620;
+    --muted: #7a7166;
+    --line: #ebe3d2;
+    --line-soft: #f0e8d8;
+    --accent: #7d9b7a;
+    --accent-deep: #5e7d5b;
+    --accent-soft: #e9efe3;
     --d: #6a7fa3;
     --a: #b07a6a;
     --s: #a98c4a;
-    --warn-bg: #fbf2e8;
-    --warn-border: #d9b88a;
-    --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+    --warn-bg: #f6ebd8;
+    --warn-border: #d9be8a;
+    --shadow: 0 1px 1px rgba(60, 40, 10, 0.03), 0 8px 24px rgba(60, 40, 10, 0.04);
+    --font-serif: ui-serif, "Iowan Old Style", "Charter", "Georgia", "Cambria", serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1a1916;
-      --surface: #232220;
-      --text: #ece7df;
-      --muted: #a39d92;
-      --line: #3a3833;
-      --accent: #8ab8b8;
-      --accent-soft: #2c3a3a;
-      --d: #8a9dc0;
-      --a: #c69a89;
-      --s: #c8aa6a;
-      --warn-bg: #2e2820;
+      --bg: #1c1814;
+      --surface: #221d17;
+      --text: #ece4d2;
+      --muted: #a39988;
+      --line: #36302a;
+      --line-soft: #2a251f;
+      --accent: #9bb898;
+      --accent-deep: #b3cdb0;
+      --accent-soft: #2a322a;
+      --d: #8ea3c6;
+      --a: #c89c89;
+      --s: #d0b06d;
+      --warn-bg: #2c2620;
       --warn-border: #6b5a3a;
-      --shadow: 0 1px 2px rgba(0,0,0,0.2), 0 4px 16px rgba(0,0,0,0.2);
+      --shadow: 0 1px 1px rgba(0,0,0,0.2), 0 8px 24px rgba(0,0,0,0.18);
     }
   }
   * { box-sizing: border-box; }
@@ -43,85 +49,81 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.55;
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
   .wrap {
-    max-width: 720px;
+    max-width: 680px;
     margin: 0 auto;
-    padding: 32px 20px 80px;
+    padding: 56px 24px 96px;
   }
   h1 {
-    font-size: 1.75rem;
-    margin: 0 0 4px;
-    font-weight: 600;
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin: 0 0 6px;
     letter-spacing: -0.01em;
+    line-height: 1.25;
   }
   .subtitle {
     color: var(--muted);
-    margin: 0 0 28px;
-    font-size: 0.95rem;
+    margin: 0 0 36px;
+    font-family: var(--font-sans);
+    font-size: 0.86rem;
+    letter-spacing: 0.01em;
   }
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 20px 22px;
-    margin-bottom: 18px;
-    box-shadow: var(--shadow);
+  .instructions {
+    margin: 0 0 36px;
+    font-size: 1.02rem;
+    color: var(--text);
+    max-width: 56ch;
+    line-height: 1.55;
   }
-  .instructions p { margin: 0 0 10px; }
-  .instructions p:last-child { margin-bottom: 0; }
-  .scale-legend {
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid var(--line);
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 6px 14px;
-    font-size: 0.92rem;
-  }
-  .scale-legend .num {
+  .instructions strong {
     font-weight: 600;
-    color: var(--accent);
-    font-variant-numeric: tabular-nums;
   }
-  .scale-legend .lbl { color: var(--muted); }
   .question {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 16px 18px 14px;
-    margin-bottom: 10px;
-    box-shadow: var(--shadow);
-    transition: border-color 0.15s, background 0.15s;
+    padding: 22px 0 8px;
+    margin-bottom: 8px;
+    border-top: 1px solid var(--line-soft);
+    transition: background 0.18s;
   }
+  .question:first-of-type { border-top: 1px solid var(--line); }
   .question.unanswered-flag {
-    border-color: var(--warn-border);
     background: var(--warn-bg);
+    border-radius: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+    margin-left: -14px;
+    margin-right: -14px;
   }
   .q-text {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     align-items: baseline;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   }
   .q-num {
     color: var(--muted);
+    font-family: var(--font-sans);
     font-variant-numeric: tabular-nums;
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     min-width: 22px;
+    padding-top: 2px;
   }
   .q-body {
     flex: 1;
-    font-size: 1rem;
+    font-size: 1.05rem;
+    line-height: 1.45;
   }
   .options {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
+    gap: 8px;
+    margin-left: 34px;
   }
   .opt {
     position: relative;
@@ -134,30 +136,24 @@
   }
   .opt .pill {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
-    padding: 10px 6px;
+    padding: 12px 6px;
     border: 1px solid var(--line);
-    border-radius: 8px;
+    border-radius: 999px;
     background: transparent;
     text-align: center;
-    transition: all 0.12s;
-    min-height: 64px;
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    color: var(--muted);
+    min-height: 44px;
+    line-height: 1.2;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
   }
-  .opt .pill .n {
-    font-weight: 600;
-    font-size: 1.05rem;
-    font-variant-numeric: tabular-nums;
+  .opt:hover .pill {
+    border-color: var(--accent);
     color: var(--text);
   }
-  .opt .pill .lbl {
-    font-size: 0.72rem;
-    color: var(--muted);
-    line-height: 1.25;
-  }
-  .opt:hover .pill { border-color: var(--accent); }
   .opt input:focus-visible + .pill {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
@@ -165,85 +161,103 @@
   .opt input:checked + .pill {
     background: var(--accent-soft);
     border-color: var(--accent);
+    color: var(--accent-deep);
+    font-weight: 500;
   }
-  .opt input:checked + .pill .n { color: var(--accent); }
   .actions {
     display: flex;
-    gap: 10px;
+    gap: 14px;
     align-items: center;
-    margin-top: 24px;
+    margin-top: 40px;
     flex-wrap: wrap;
+    font-family: var(--font-sans);
   }
   button {
     font: inherit;
+    font-family: var(--font-sans);
     cursor: pointer;
-    padding: 10px 18px;
-    border-radius: 8px;
-    border: 1px solid var(--accent);
-    background: var(--accent);
-    color: white;
+    padding: 11px 22px;
+    border-radius: 999px;
+    border: 1px solid var(--accent-deep);
+    background: var(--accent-deep);
+    color: var(--surface);
     font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
     transition: opacity 0.12s, transform 0.05s;
   }
-  button:hover { opacity: 0.92; }
+  button:hover { opacity: 0.9; }
   button:active { transform: translateY(1px); }
   button.secondary {
     background: transparent;
-    color: var(--accent);
+    color: var(--muted);
+    border-color: var(--line);
   }
+  button.secondary:hover { color: var(--text); border-color: var(--muted); }
   .progress {
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     margin-left: auto;
     font-variant-numeric: tabular-nums;
   }
   .results { display: none; }
   .results.show { display: block; }
-  .result-card {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 20px 22px;
-    margin-bottom: 14px;
-    box-shadow: var(--shadow);
+  .results h2 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 1.35rem;
+    margin: 48px 0 18px;
+    letter-spacing: -0.01em;
   }
+  .result-card {
+    padding: 22px 0;
+    border-top: 1px solid var(--line-soft);
+  }
+  .result-card:first-of-type { border-top: 1px solid var(--line); }
   .result-head {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
   .result-name {
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 500;
   }
   .result-name.d { color: var(--d); }
   .result-name.a { color: var(--a); }
   .result-name.s { color: var(--s); }
   .result-score {
+    font-family: var(--font-sans);
     font-variant-numeric: tabular-nums;
-    font-weight: 600;
-    font-size: 1.05rem;
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--muted);
   }
-  .result-score .max { color: var(--muted); font-weight: 400; }
+  .result-score .num {
+    color: var(--text);
+    font-size: 1.1rem;
+  }
   .result-severity {
-    font-size: 0.95rem;
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
     color: var(--muted);
     margin-bottom: 14px;
   }
-  .result-severity strong { color: var(--text); }
+  .result-severity strong { color: var(--text); font-weight: 500; }
   .bar {
     position: relative;
-    height: 10px;
+    height: 6px;
     background: var(--line);
-    border-radius: 5px;
+    border-radius: 3px;
     overflow: visible;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
   .bar-fill {
     height: 100%;
-    border-radius: 5px;
+    border-radius: 3px;
     background: var(--accent);
     transition: width 0.4s ease;
   }
@@ -252,65 +266,74 @@
   .bar-fill.s { background: var(--s); }
   .bar-marker {
     position: absolute;
-    top: -3px;
+    top: -2px;
     width: 1px;
-    height: 16px;
+    height: 10px;
     background: var(--muted);
-    opacity: 0.35;
+    opacity: 0.3;
   }
   .bar-labels {
     display: flex;
     justify-content: space-between;
-    font-size: 0.72rem;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
     color: var(--muted);
     font-variant-numeric: tabular-nums;
-    margin-top: 2px;
+    margin-top: 4px;
   }
   .result-blurb {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--muted);
-    margin: 12px 0 0;
-    line-height: 1.5;
+    margin: 14px 0 0;
+    line-height: 1.55;
+    max-width: 56ch;
   }
   .disclaimer {
     background: var(--warn-bg);
     border: 1px solid var(--warn-border);
     border-radius: 10px;
     padding: 16px 18px;
-    margin: 18px 0;
-    font-size: 0.92rem;
+    margin: 20px 0 8px;
+    font-size: 0.93rem;
+    line-height: 1.55;
+    max-width: 56ch;
   }
-  .disclaimer strong { display: block; margin-bottom: 4px; }
+  .disclaimer strong { display: block; margin-bottom: 4px; font-weight: 600; }
   .footer {
-    margin-top: 28px;
-    padding-top: 20px;
-    border-top: 1px solid var(--line);
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    font-family: var(--font-sans);
     font-size: 0.8rem;
     color: var(--muted);
-    line-height: 1.6;
+    line-height: 1.65;
+    max-width: 60ch;
   }
-  .footer a { color: var(--muted); }
+  .footer p { margin: 0 0 10px; }
+  .footer a { color: var(--muted); text-decoration: underline; text-decoration-color: var(--line); }
+  .footer a:hover { text-decoration-color: var(--muted); }
   .error-banner {
     display: none;
     background: var(--warn-bg);
     border: 1px solid var(--warn-border);
     border-radius: 8px;
-    padding: 10px 14px;
+    padding: 11px 14px;
     margin-bottom: 14px;
-    font-size: 0.92rem;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
   }
   .error-banner.show { display: block; }
-  @media (max-width: 520px) {
-    .wrap { padding: 20px 14px 60px; }
-    .options { grid-template-columns: repeat(4, 1fr); gap: 4px; }
-    .opt .pill { padding: 8px 2px; min-height: 70px; }
-    .opt .pill .lbl { font-size: 0.66rem; }
+  @media (max-width: 540px) {
+    .wrap { padding: 36px 18px 64px; }
+    .options { grid-template-columns: repeat(2, 1fr); margin-left: 0; }
+    .q-body { font-size: 1rem; }
     h1 { font-size: 1.4rem; }
+    body { font-size: 16px; }
   }
   @media print {
-    body { background: white; }
+    body { background: white; color: black; font-family: var(--font-serif); }
     button, .actions { display: none; }
-    .question, .card, .result-card { box-shadow: none; break-inside: avoid; }
+    .question, .result-card { break-inside: avoid; }
   }
 </style>
 </head>
@@ -319,16 +342,7 @@
   <h1>Depression, Anxiety &amp; Stress check-in</h1>
   <p class="subtitle">DASS-21 · 21 items · ~3 minutes · stays on this device</p>
 
-  <div class="card instructions">
-    <p>Read each statement and choose the answer that best reflects how much it applied to you <strong>over the past week</strong>. There are no right or wrong answers — don't spend too long on any one statement.</p>
-    <p>Nothing leaves your browser. No accounts, no tracking, no data sent anywhere.</p>
-    <div class="scale-legend">
-      <span class="num">0</span><span class="lbl">Did not apply to me at all</span>
-      <span class="num">1</span><span class="lbl">Applied to me to some degree, or some of the time</span>
-      <span class="num">2</span><span class="lbl">Applied to me to a considerable degree, or a good part of the time</span>
-      <span class="num">3</span><span class="lbl">Applied to me very much, or most of the time</span>
-    </div>
-  </div>
+  <p class="instructions">Read each statement and choose the answer that best reflects how much it applied to you <strong>over the past week</strong>.</p>
 
   <div id="error-banner" class="error-banner" role="alert" aria-live="polite"></div>
 
@@ -341,10 +355,10 @@
   </div>
 
   <section id="results" class="results" aria-live="polite">
-    <h2 style="margin-top:32px; font-size:1.3rem;">Your results</h2>
+    <h2>Your results</h2>
     <div class="disclaimer">
       <strong>This is a screening tool, not a diagnosis.</strong>
-      The DASS-21 measures how strongly you've experienced symptoms relative to a general population — it can't diagnose anything. If your scores feel meaningful to you, or if anything you read here resonates uncomfortably, talking with a clinician, counsellor, or trusted person is a good next step.
+      The DASS-21 measures how strongly you've experienced symptoms relative to a general population — it can't diagnose anything. If your scores feel meaningful, or if anything you read here resonates uncomfortably, talking with a clinician, counsellor, or trusted person is a good next step.
     </div>
     <div id="result-d" class="result-card"></div>
     <div id="result-a" class="result-card"></div>
@@ -390,8 +404,10 @@ const ITEMS = [
   { n: 21, sub: "D", text: "I felt that life was meaningless" }
 ];
 
-// Short labels shown under each radio. Long versions appear in the legend at top.
-const OPTION_LABELS = ["Not at all", "Some of\nthe time", "A good part\nof the time", "Most of\nthe time"];
+// Canonical scoring: 0 = Did not apply, 1 = some of the time, 2 = good part of
+// the time, 3 = most of the time. UI uses friendlier labels (Never / Sometimes
+// / Often / Almost always) — order and underlying values are unchanged.
+const OPTION_LABELS = ["Never", "Sometimes", "Often", "Almost always"];
 
 const SUBSCALES = {
   D: {
@@ -482,7 +498,7 @@ function renderQuestions() {
 
       const pill = document.createElement("span");
       pill.className = "pill";
-      pill.innerHTML = `<span class="n">${v}</span><span class="lbl">${OPTION_LABELS[v].replace("\n","<br>")}</span>`;
+      pill.textContent = OPTION_LABELS[v];
 
       label.appendChild(input);
       label.appendChild(pill);
@@ -546,7 +562,6 @@ function renderResultCard(sub, result) {
   const meta = SUBSCALES[sub];
   const el = document.getElementById(`result-${subKey}`);
 
-  // Markers at each band boundary (skip the final Infinity)
   const bands = SEVERITY[sub];
   const markers = bands.slice(0, -1).map(b => {
     const pct = (b.max / 42) * 100;
@@ -558,7 +573,7 @@ function renderResultCard(sub, result) {
   el.innerHTML = `
     <div class="result-head">
       <span class="result-name ${subKey}">${meta.name}</span>
-      <span class="result-score">${result.score}<span class="max"> / 42</span></span>
+      <span class="result-score"><span class="num">${result.score}</span> / 42</span>
     </div>
     <div class="result-severity">Severity: <strong>${result.severity}</strong></div>
     <div class="bar" aria-hidden="true">
@@ -576,11 +591,9 @@ function showResults() {
     const missing = ITEMS.filter(i => answers[i.n] === undefined).map(i => i.n);
     errorBanner.textContent = `Please answer all 21 questions. Missing: ${missing.join(", ")}.`;
     errorBanner.classList.add("show");
-    // Flag unanswered questions visually
     for (const n of missing) {
       document.getElementById(`q-${n}`).classList.add("unanswered-flag");
     }
-    // Scroll to first missing
     const firstMissing = document.getElementById(`q-${missing[0]}`);
     if (firstMissing) firstMissing.scrollIntoView({ behavior: "smooth", block: "center" });
     return;
